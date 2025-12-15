@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bus Management System Dashboard</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    :root{
+      --green:#a8d5b2;
+      --dark-green:#2ecc71;
+      --pink:#ffd6d6;
+      --yellow:#ffe066;
+      --border:#333;
+      --light:#f9f9f9;
+    }
+    body{
+      font-family: Arial, Helvetica, sans-serif;
+      background:#fff;
+      margin:0;
+      padding:20px;
+    }
+    h1{margin:0 0 10px 0;}
+    .kpi-row{display:grid;grid-template-columns:repeat(7,1fr);gap:10px;margin-bottom:15px;}
+    .kpi{border:1.5px solid var(--border);border-radius:14px;padding:12px;text-align:center;}
+    .kpi .value{font-size:28px;font-weight:bold;}
+    .section{margin-top:20px;}
+    .section-title{
+      padding:8px 12px;
+      font-weight:bold;
+      border-radius:6px;
+      margin-bottom:10px;
+    }
+    .operational{background:var(--green);}
+    .financial{background:var(--pink);}
+    .feedback{background:var(--yellow);}
+    .depots{background:var(--dark-green);color:#fff;}
+    .grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:15px;}
+    .grid-2{display:grid;grid-template-columns:2fr 1fr;gap:15px;}
+    .card{border:1.5px solid var(--border);border-radius:16px;padding:14px;background:#fff;}
+    .card h3{margin:0 0 10px 0;font-size:15px;}
+    canvas{max-height:260px;}
+    .big-number{font-size:34px;font-weight:bold;}
+    .red{color:#e53935;}
+    .center{text-align:center;}
+    .tabs span{
+      border:1px solid #999;
+      padding:4px 10px;
+      border-radius:20px;
+      margin-right:6px;
+      font-size:12px;
+      cursor:pointer;
+    }
+    .tabs .active{background:#f6c1b5;}
+  </style>
+</head>
+<body>
+
+<h1>BUS MANAGEMENT SYSTEM</h1>
+
+<!-- KPI ROW -->
+<div class="kpi-row">
+  <div class="kpi"><div class="value">4,074</div>Buses</div>
+  <div class="kpi"><div class="value">443</div>Routes</div>
+  <div class="kpi"><div class="value">3,000</div>Stops</div>
+  <div class="kpi"><div class="value">23</div>Depots</div>
+  <div class="kpi"><div class="value">40</div>Terminals</div>
+  <div class="kpi"><div class="value">8,736</div>Drivers</div>
+  <div class="kpi"><div class="value">4,036</div>Conductors</div>
+</div>
+
+<!-- OPERATIONAL PERFORMANCE -->
+<div class="section">
+  <div class="section-title operational">OPERATIONAL PERFORMANCE</div>
+
+  <div class="grid-3">
+    <div class="card">
+      <h3>Ridership (Yesterday)</h3>
+      <div class="big-number">10,34,857</div>
+      <p>Men: 6,20,914 (60%)<br>Women: 4,13,943 (40%)</p>
+    </div>
+    <div class="card">
+      <h3>Outshedding</h3>
+      <div class="big-number">3,056</div>
+      <p>Morning: 85%<br>Evening: 64%</p>
+    </div>
+    <div class="card">
+      <h3>Trips Operating Ratio</h3>
+      <div class="big-number">79.5%</div>
+      <p>Morning: 95%<br>Evening: 64%</p>
+    </div>
+  </div>
+
+  <div class="grid-2" style="margin-top:15px;">
+    <div class="card">
+      <h3>Monthly Ridership</h3>
+      <canvas id="ridershipChart"></canvas>
+    </div>
+    <div class="card">
+      <h3>Digital Ticketing Adoption</h3>
+      <div class="big-number red center">05%</div>
+      <canvas id="ticketChart"></canvas>
+    </div>
+  </div>
+</div>
+
+<!-- FINANCIAL PERFORMANCE -->
+<div class="section">
+  <div class="section-title financial">FINANCIAL PERFORMANCE</div>
+  <div class="grid-3">
+    <div class="card center"><div class="big-number">77.5</div>Cost / km (INR)</div>
+    <div class="card center"><div class="big-number">45.6</div>Revenue / km (INR)</div>
+    <div class="card center"><div class="big-number red">1.7</div>Operating Ratio</div>
+  </div>
+</div>
+
+<!-- FEEDBACK -->
+<div class="section">
+  <div class="section-title feedback">FEEDBACK FROM PASSENGERS</div>
+  <div class="card">
+    <h3>Complaints Registered: 2,163</h3>
+    <canvas id="complaintsChart"></canvas>
+  </div>
+</div>
+
+<!-- DEPOTS -->
+<div class="section">
+  <div class="section-title depots">DEPOTS PERFORMANCE</div>
+  <div class="card">
+    <canvas id="depotChart"></canvas>
+  </div>
+</div>
+
+<script>
+// RIDERSHIP BAR
+new Chart(document.getElementById('ridershipChart'),{
+  type:'bar',
+  data:{
+    labels:['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],
+    datasets:[
+      {label:'Men',data:[19,17,19,18,19,18,19,19,19,18,19,19],backgroundColor:'#f4c7a1'},
+      {label:'Women',data:[12,11,12,11,12,11,12,12,12,11,12,12],backgroundColor:'#b7d7a8'}
+    ]
+  },options:{responsive:true,plugins:{legend:{position:'bottom'}}}
+});
+
+// DIGITAL TICKETING
+new Chart(document.getElementById('ticketChart'),{
+  type:'doughnut',
+  data:{
+    labels:['Pre-printed','ETM','WhatsApp','Mobile App','Bus Pass'],
+    datasets:[{data:[34,39,13,3,2]}]
+  },options:{plugins:{legend:{position:'bottom'}}}
+});
+
+// COMPLAINTS
+new Chart(document.getElementById('complaintsChart'),{
+  type:'bar',
+  data:{
+    labels:['Buses','Driver','Conductor','Bus Marshal','Bus Stops'],
+    datasets:[
+      {label:'Men',data:[183,157,129,64,117],backgroundColor:'#f4c7a1'},
+      {label:'Women',data:[362,323,285,150,239],backgroundColor:'#b7d7a8'}
+    ]
+  },options:{plugins:{legend:{position:'bottom'}}}
+});
+
+// DEPOT RIDERSHIP
+new Chart(document.getElementById('depotChart'),{
+  type:'bar',
+  data:{
+    labels:Array.from({length:23},(_,i)=>`Depot ${i+1}`),
+    datasets:[{label:'Daily Ridership',data:[42000,38000,51000,47000,40000,45000,49000,41000,53000,37000,50000,40500,48000,36000,50000,44000,52000,38000,46000,39000,54000,35000,62000],backgroundColor:'#4a76c9'}]
+  },options:{plugins:{legend:{display:false}}}
+});
+</script>
+
+</body>
+</html>
